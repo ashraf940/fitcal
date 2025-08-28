@@ -4,14 +4,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework_simplejwt.tokens import RefreshToken
-from google.oauth2 import id_token
-from google.auth.transport import requests as google_requests
-from .models import User
-from .serializers import UserSerializer, RegisterSerializer, VerifyOTPSerializer, ResendOTPSerializer
-from .models import EmailOTP
-from .utils import create_and_send_otp
 from django.utils import timezone
 
+from .models import User, EmailOTP
+from .serializers import UserSerializer, RegisterSerializer, VerifyOTPSerializer, ResendOTPSerializer
+from .utils import create_and_send_otp
 
 class RegisterView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -27,7 +24,9 @@ class RegisterView(APIView):
         user = serializer.save()
         user.is_active = False
         user.save()
-        create_and_send_otp(user)
+
+        create_and_send_otp(user)  # async email
+
         return Response({"detail": "User created. OTP sent to email."}, status=status.HTTP_201_CREATED)
 
 
@@ -43,11 +42,13 @@ class ResendOTPView(APIView):
         email = request.data.get("email")
         if not email:
             return Response({"detail": "email required"}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             return Response({"detail": "user not found"}, status=status.HTTP_404_NOT_FOUND)
-        create_and_send_otp(user)
+
+        create_and_send_otp(user)  # async resend
         return Response({"detail": "OTP resent"}, status=status.HTTP_200_OK)
 
 
@@ -73,6 +74,7 @@ class VerifyOTPView(APIView):
         otp_qs = EmailOTP.objects.filter(
             user=user, code=code, used=False, expires_at__gt=timezone.now()
         ).order_by("-created_at")
+
         if not otp_qs.exists():
             return Response({"detail": "invalid or expired code"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -89,6 +91,7 @@ class VerifyOTPView(APIView):
             "access": str(refresh.access_token),
             "user": UserSerializer(user).data
         })
+
 
 from google.auth.transport import requests
 from google.oauth2 import id_token
