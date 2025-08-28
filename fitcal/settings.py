@@ -81,6 +81,16 @@ DATABASES = {
         default='postgres://admin:admin123@localhost:5432/admin'
     )
 }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'admin',      
+        'USER': 'admin',      
+        'PASSWORD': 'admin123',  
+        'HOST': 'localhost',    
+        'PORT': '5432',          
+    }
+}
 
 # -----------------------------
 # Password validators
