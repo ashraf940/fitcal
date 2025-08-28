@@ -145,6 +145,26 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'sohailshahzad500@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'ahat uiwz vqlb uqku')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+INSTALLED_APPS += ["anymail"]
+
+# Email Backend
+EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
+DEFAULT_FROM_EMAIL = "sohailshahzad500@gmail.com"  # replace with your verified domain/email
+
+# AnyMail / SendGrid API
+ANYMAIL = {
+    "SENDGRID_API_KEY": os.environ.get("SENDGRID_API_KEY"),
+}
+
+# Optional: SMTP fallback if needed
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+# settings.py
+EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+DEFAULT_FROM_EMAIL = 'sohailshahzad500@gmail.com'
+
 # -----------------------------
 # Social Auth
 # -----------------------------

@@ -2,8 +2,8 @@ import threading
 import random
 from datetime import timedelta
 from django.utils import timezone
-from django.conf import settings
 from django.core.mail import send_mail
+from django.conf import settings
 from .models import EmailOTP
 
 def generate_numeric_otp(length=6):
