@@ -9,6 +9,8 @@ from google.auth.transport import requests as google_requests
 from .models import User
 from .serializers import UserSerializer, RegisterSerializer, VerifyOTPSerializer, ResendOTPSerializer
 from .models import EmailOTP
+from .utils import create_and_send_otp
+from django.utils import timezone
 
 
 class RegisterView(APIView):
