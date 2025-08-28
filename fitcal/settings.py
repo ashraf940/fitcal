@@ -1,20 +1,13 @@
 from pathlib import Path
 import os
-import dj_database_url
 from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# -----------------------------
-# Secret key & Debug
-# -----------------------------
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret-key')
 DEBUG = False
-ALLOWED_HOSTS = ['*']  # Railway URL ya '*' for testing
+ALLOWED_HOSTS = ['*']
 
-# -----------------------------
-# Installed apps
-# -----------------------------
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -50,7 +43,6 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "fitcal.urls"
@@ -73,14 +65,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "fitcal.wsgi.application"
 
-# -----------------------------
-# Database (PostgreSQL)
-# -----------------------------
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default='postgres://admin:admin123@localhost:5432/admin'
-#     )
-#}
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -88,11 +72,6 @@ DATABASES = {
     }
 }
 
-
-
-# -----------------------------
-# Password validators
-# -----------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
@@ -100,17 +79,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
-# -----------------------------
-# Internationalization
-# -----------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# -----------------------------
-# Static files
-# -----------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -135,7 +108,7 @@ SIMPLE_JWT = {
 }
 
 # -----------------------------
-# Email (Gmail)
+# Email (Gmail SMTP)
 # -----------------------------
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -145,57 +118,12 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'sohailshahzad500@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'ahat uiwz vqlb uqku')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-INSTALLED_APPS += ["anymail"]
-
-# Email Backend
-EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
-DEFAULT_FROM_EMAIL = "sohailshahzad500@gmail.com"  # replace with your verified domain/email
-
-# AnyMail / SendGrid API
-ANYMAIL = {
-    "SENDGRID_API_KEY": os.environ.get("SENDGRID_API_KEY"),
-}
-
-# Optional: SMTP fallback if needed
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-
-# settings.py
-EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
-SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-DEFAULT_FROM_EMAIL = 'sohailshahzad500@gmail.com'
-
 # -----------------------------
 # Social Auth
 # -----------------------------
 SITE_ID = 1
 REST_USE_JWT = True
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': 'YOUR_GOOGLE_CLIENT_ID',
-            'secret': 'YOUR_GOOGLE_CLIENT_SECRET',
-            'key': ''
-        }
-    },
-    'apple': {
-        'APP': {
-            'client_id': 'YOUR_APPLE_CLIENT_ID',
-            'secret': 'YOUR_APPLE_CLIENT_SECRET',
-        }
-    }
-}
-
-# -----------------------------
-# Swagger
-# -----------------------------
-SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': False,
-    'SECURITY_DEFINITIONS': {
-        'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-        }
-    }
+    'google': {'APP': {'client_id': '', 'secret': '', 'key': ''}},
+    'apple': {'APP': {'client_id': '', 'secret': ''}},
 }

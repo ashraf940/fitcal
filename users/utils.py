@@ -10,6 +10,7 @@ def generate_numeric_otp(length=6):
     return "".join(str(random.randint(0, 9)) for _ in range(length))
 
 def send_otp_email(subject, message, recipient_list):
+    # Gmail SMTP backend se email send hoga
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient_list, fail_silently=False)
 
 def create_and_send_otp(user):
