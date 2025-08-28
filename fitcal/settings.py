@@ -76,21 +76,19 @@ WSGI_APPLICATION = "fitcal.wsgi.application"
 # -----------------------------
 # Database (PostgreSQL)
 # -----------------------------
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://admin:admin123@localhost:5432/admin'
-    )
-}
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgres://admin:admin123@localhost:5432/admin'
+#     )
+#}
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'admin',      
-        'USER': 'admin',      
-        'PASSWORD': 'admin123',  
-        'HOST': 'localhost',    
-        'PORT': '5432',          
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
 
 # -----------------------------
 # Password validators
