@@ -21,9 +21,10 @@ def send_otp_email(subject, message, recipient_list):
             fail_silently=False,
         )
         logger.info(f"OTP email bheja: {recipient_list}")
+        return True
     except Exception as e:
         logger.error(f"OTP email nahi bheja: {recipient_list}, error: {str(e)}")
-        raise
+        return False
 
 def create_and_send_otp(user):
     try:
@@ -37,8 +38,11 @@ def create_and_send_otp(user):
         message = f"Tumhara code hai: {code}. Ye 10 minute mein expire ho jayega."
         recipient_list = [user.email]
 
-        send_otp_email(subject, message, recipient_list)
-        return otp
+        if send_otp_email(subject, message, recipient_list):
+            return otp
+        else:
+            logger.error(f"Failed to send OTP to {user.email}")
+            return None
     except Exception as e:
         logger.error(f"OTP banane mein error for {user.email}: {str(e)}")
-        raise
+        return None
