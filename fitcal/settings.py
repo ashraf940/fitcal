@@ -1,3 +1,4 @@
+# fitcal/settings.py
 from pathlib import Path
 import os
 from datetime import timedelta
@@ -6,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret-key')
 DEBUG = False
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*", ".up.railway.app"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -63,27 +64,27 @@ TEMPLATES = [
 WSGI_APPLICATION = "fitcal.wsgi.application"
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Auth & JWT
 AUTH_USER_MODEL = "users.User"
@@ -102,42 +103,28 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
 }
 
-# # Email (Gmail SMTP with SSL)
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 465
-# EMAIL_USE_SSL = True
-# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'sohailshahzad500@gmail.com')
-# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Must be set in Railway
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# ✅ SendGrid Email Config
+import os
 
+# --- Mailgun settings for sending emails ---
+MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY")
+MAILGUN_DOMAIN = os.getenv("MAILGUN_DOMAIN")
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+# Example: for sending OTP emails via Mailgun
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.mailgun.org"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sohailshahzad500@gmail.com'
-EMAIL_HOST_PASSWORD = 'ahat uiwz vqlb uqku'
-DEFAULT_FROM_EMAIL = 'sohailshahzad500@gmail.com'
-
+EMAIL_HOST_USER = f"postmaster@{MAILGUN_DOMAIN}"
+EMAIL_HOST_PASSWORD = MAILGUN_API_KEY
 # Logging for debugging
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-        },
-        '': {
-            'handlers': ['console'],
-            'level': 'INFO',
-        },
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {
+        "django": {"handlers": ["console"], "level": "INFO"},
+        "": {"handlers": ["console"], "level": "INFO"},
     },
 }
 
@@ -145,6 +132,6 @@ LOGGING = {
 SITE_ID = 1
 REST_USE_JWT = True
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {'APP': {'client_id': '', 'secret': '', 'key': ''}},
-    'apple': {'APP': {'client_id': '', 'secret': ''}},
+    "google": {"APP": {"client_id": "", "secret": "", "key": ""}},
+    "apple": {"APP": {"client_id": "", "secret": ""}},
 }
