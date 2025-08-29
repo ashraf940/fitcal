@@ -127,6 +127,8 @@ LOGGING = {
         "": {"handlers": ["console"], "level": "INFO"},
     },
 }
+ALLOWED_HOSTS = ["*", ".up.railway.app"]
+
 
 # Social Auth
 SITE_ID = 1
